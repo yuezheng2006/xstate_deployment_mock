@@ -1,0 +1,24 @@
+graph TD
+    A[useDeployment Hook] --> B[useMachine<br>初始化状态机]
+    
+    B --> C[返回state和send]
+    
+    C --> D[状态控制函数<br>startDeployment等]
+    
+    D --> |调用send| E[发送事件<br>COMMIT/CI_SUCCESS等]
+    
+    E --> F[状态机处理事件]
+    
+    F --> |状态转换| G[更新state]
+    
+    G --> |触发重渲染| H[UI更新]
+    
+    H --> |用户交互| D
+
+    subgraph "模拟函数"
+        I[simulateStep] --> |延迟执行| J[随机成功/失败]
+        J --> |成功| K[发送成功事件]
+        J --> |失败| L[发送失败事件]
+    end
+
+    D --> I

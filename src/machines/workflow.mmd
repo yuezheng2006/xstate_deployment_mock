@@ -1,0 +1,18 @@
+graph TD
+    idle[Idle] --> |COMMIT| runningCI[Running CI]
+    
+    runningCI --> |CI_SUCCESS| deploying[Deploying]
+    runningCI --> |CI_FAILURE| failed[Failed]
+    
+    deploying --> |DEPLOYMENT_SUCCESS| checkingPreview[Checking Preview]
+    deploying --> |DEPLOYMENT_FAILURE| failed
+    
+    checkingPreview --> |PREVIEW_CHECK_SUCCESS| readyForProduction[Ready for Production]
+    checkingPreview --> |PREVIEW_CHECK_FAILURE| failed
+    
+    readyForProduction --> |PROMOTE_TO_PRODUCTION| promoting[Promoting]
+    
+    promoting --> |PRODUCTION_SUCCESS| success[Success]
+    promoting --> |PRODUCTION_FAILURE| failed
+    
+    failed --> |COMMIT| runningCI
